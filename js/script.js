@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
         id: "10",
         title: "Bohemian Rhapsody",
         artist: "Queen",
-        cover: "http://avatars.mds.yandex.net/get-vthumb/3548692/69859458f81cdeb27228f05810696a5f/800x450",
+        cover: "https://vinylsound.ru/upload/iblock/785/x5i2taiaykxmzxj70yhrjwn1cdji5x3n/lp_queen_queen_ii_01.jpg",
         audioSrc: "audio10.mp3",
         duration: "05:55"
     },
