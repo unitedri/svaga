@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поп-музыка</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #000000;
+        }
+        
+        .main-header {
+            background-color: #133abb;
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            height: 40px;
+            border-radius: 15px;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .search-container {
+            position: relative;
+            width: 200px;
+            margin-right: 15px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 8px 4px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .categories-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 200px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 5px;
+            display: none;
+            color: #000000;
+            z-index: 101;
+        }
+        
+        .categories-dropdown.active {
+            display: block;
+        }
+        
+        .category-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .category-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .category-item:first-child {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        
+        .category-item:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        
+        .favorites-btn, .menu-btn {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .content {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .title {
+           font-size: 72px;
+    font-weight: 700;
+    color: #140202;
+    margin: 30px 20px;
+    background: linear-gradient(45deg, #3b0fd8, #218de6, #0c29cf);
+    border-radius: 40px;
+    text-align: center;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tracks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .track-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgb(46, 38, 38);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .track-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-grow: 1;
+        }
+        
+        .track-cover {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .track-title {
+            margin: 0;
+            font-size: 1.1em;
+        }
+        
+        .track-artist {
+            margin: 5px 0 0;
+            color: #666;
+            text-decoration: none;
+        }
+        
+        .track-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .play-btn {
+            background-color: #322fd3;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .favorite-btn, .download-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .favorite-btn.active {
+            color: #fffafa;
+        }
+        
+        .progress-container {
+            width: calc(100% - 30px);
+            height: 4px;
+            background-color: #eee;
+            margin: 10px 15px 5px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #3a2fd3;
+            width: 0%;
+            border-radius: 2px;
+            position: relative;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: #666;
+            padding: 0 15px;
+        }
+        
+        .audio-controls {
+            width: 100%;
+        }
+        
+       
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .back-btn {
+            background: none;
+            border: 1px solid #0a1288;
+            color: #ffffff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 1024px) {
+            .title {
+                font-size: 48px;
+                margin: 20px 10px;
+                border-radius: 30px;
+            }
+            
+            .track-card {
+                padding: 12px;
+            }
+            
+            .track-cover {
+                width: 50px;
+                height: 50px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 36px;
+                margin: 15px 5px;
+                border-radius: 20px;
+            }
+            
+            .header-content {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .search-container {
+                order: 3;
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+            
+            .track-info {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .track-title, .track-artist {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: 28px;
+                padding: 10px;
+                margin: 10px 5px;
+            }
+            
+            .favorites-btn, .menu-btn {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+            
+            .track-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .track-actions {
+                align-self: flex-end;
+            }
+            
+            .track-title, .track-artist {
+                max-width: 200px;
+            }
+            
+            .progress-container {
+                margin: 10px 0 5px;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .title {
+                font-size: 24px;
+            }
+            
+            .track-title, .track-artist {
+                max-width: 150px;
+            }
+            
+            .header-actions {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <img class="logo" src="logo.jpg" alt="Логотип">
+            <div class="header-actions">
+                   <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Искать здесь..." readonly>
+                    <button class="search-btn">🔍</button>
+                    <div class="categories-dropdown" id="categoriesDropdown">
+                     <a href="index.html">   <div class="category-item" data-category="top">Топ чарты</div></a>
+                 <a href="index2.html">       <div class="category-item" data-category="military">Военная музыка</div></a>
+                  <a href="index3.html">      <div class="category-item" data-category="pop">Поп-музыка</div></a>
+                  <a href="index4.html">      <div class="category-item" data-category="rock">Рок-музыка</div></a>
+                 <a href="index5.html">       <div class="category-item" data-category="rap">Рэп-музыка</div></a>
+                    </div>
+                </div>
+          <a href="favorites.html">      <button class="favorites-btn" id="showFavorites">Избранное</button></a>
+              <a href="index2.html">  <button  class="menu-btn">Главная</button></a>
+            </div>
+        </div>
+    </header>
+    
+    <main class="content">
+       
+        <section id="main-page" class="page active">
+            <h1 class="title">ПОП-МУЗЫКА</h1>
+            <h2 class="section-title">Популярные треки</h2>
+            
+            <div class="tracks-list">
+                <div class="track-card" data-artist="Taylor Swift">
+                    <div class="track-info">
+                        <img class="track-cover" src="https://cdn.forbes.ru/forbes-static/c/1824x1026/new/2024/12/GettyImages-1474266803-kopia-6751aedfb358c.jpg" alt="Обложка">
+                        <div>
+                            <h3 class="track-title">Cruel Summer</h3>
+                            <a class="track-artist" href="artist13.html">Taylor Swift</a>
+                        </div>
+                    </div>
+                    <div class="track-actions">
+                        <button class="favorite-btn" data-track="13">♥</button>
+                    <a download="" href="audio13.mp3"  >  <button class="download-btn">↓</button></a>
+                        <button class="play-btn" data-audio="audio13">►</button>
+                    </div>
+                    <audio id="audio13" src="audio13.mp3"></audio>
+                    
+                    <div class="audio-controls">
+                        <div class="progress-container" data-audio="audio13">
+                            <div class="progress-bar"></div>
+                        </div>
+                        <div class="time-info">
+                            <span class="current-time">0:00</span>
+                            <span class="track-duration">02:58</span>
+                        </div>
+                        <input type="range" min="0" max="1" step="0.01" value="1" 
+       oninput="document.getElementById('audio13').volume=this.value" 
+       style="width:80px; height:3px; accent-color:#4CAF50;">
+                    </div>
+                </div>
+                
+              
+                <div class="track-card" data-artist="Dua Lipa">
+                    <div class="track-info">
+                        <img class="track-cover" src="https://avatars.mds.yandex.net/i?id=96e2599168116d2fbe8e3a583c0f090b_l-5288046-images-thumbs&n=13" alt="Обложка">
+                        <div>
+                            <h3 class="track-title">Don't Start Now</h3>
+                            <a class="track-artist" href="artist14.html">Dua Lipa</a>
+                        </div>
+                    </div>
+                    <div class="track-actions">
+                        <button class="favorite-btn" data-track="14">♥</button>
+                   <a download="" href="audio14.mp3" >    <button class="download-btn">↓</button></a>
+                        <button class="play-btn" data-audio="audio14">►</button>
+                    </div>
+                    <audio id="audio14" src="audio14.mp3"></audio>
+                    
+                    <div class="audio-controls">
+                        <div class="progress-container" data-audio="audio14">
+                            <div class="progress-bar"></div>
+                        </div>
+                        <div class="time-info">
+                            <span class="current-time">0:00</span>
+                            <span class="track-duration">03:03</span>
+                        </div>
+                        <input type="range" min="0" max="1" step="0.01" value="1" 
+       oninput="document.getElementById('audio14').volume=this.value" 
+       style="width:80px; height:3px; accent-color:#4CAF50;">
+                    </div>
+                </div>
+                
+               
+                <div class="track-card" data-artist="The Weeknd">
+                    <div class="track-info">
+                        <img class="track-cover" src="https://lastfm.freetls.fastly.net/i/u/ar0/54f6328d1b36d25ff3465bf4f3defaa5.jpg" alt="Обложка">
+                        <div>
+                            <h3 class="track-title">Blinding Lights</h3>
+                            <a class="track-artist" href="artist15.html">The Weeknd</a>
+                        </div>
+                    </div>
+                    <div class="track-actions">
+                        <button class="favorite-btn" data-track="15">♥</button>
+                    <a download="" href="audio15.mp3" >   <button class="download-btn">↓</button></a>
+                        <button class="play-btn" data-audio="audio15">►</button>
+                    </div>
+                    <audio id="audio15" src="audio15.mp3"></audio>
+                    
+                    <div class="audio-controls">
+                        <div class="progress-container" data-audio="audio15">
+                            <div class="progress-bar"></div>
+                        </div>
+                        <div class="time-info">
+                            <span class="current-time">0:00</span>
+                            <span class="track-duration">03:20</span>
+                        </div>
+                        <input type="range" min="0" max="1" step="0.01" value="1" 
+       oninput="document.getElementById('audio15').volume=this.value" 
+       style="width:80px; height:3px; accent-color:#4CAF50;">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+       
+        <section id="favorites-page" class="page">
+            <button class="back-btn" id="backToMain">← Назад</button>
+            <h1 class="title">Мои плейлисты</h1>
+            <h2 class="section-title">Избранные треки</h2>
+            
+            <div class="tracks-list" id="favorites-list">
+               
+            </div>
+        </section>
+    </main>
+    
+    <script src="js/script.js">
+    </script>
+</body>
+</html>
