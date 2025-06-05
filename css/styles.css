@@ -108,8 +108,7 @@ body {
 .button:hover {
     background-color: #2f3670;
 }
-
-/* Адаптация для планшетов */
+
 @media (max-width: 768px) {
     .header {
         padding: 10px 15px;
@@ -147,8 +146,7 @@ body {
 .search-bar {
 width: 380px;
 }
-}
-/* Адаптация для мобильных телефонов */
+}
 @media (max-width: 480px) {
     .header {
         flex-direction: row;
@@ -200,8 +198,7 @@ width: 380px;
         font-size: 15px;
     }
 }
-
-/* Адаптация для маленьких телефонов */
+
 @media (max-width: 360px) {
     .search-bar {
         font-size: 12px;
